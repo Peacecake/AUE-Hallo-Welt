@@ -1,5 +1,6 @@
 package de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,16 +8,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements FirebaseListener {
 
     private EditText etUsername;
     private EditText etEmail;
     private EditText etPassword;
     private EditText etPasswordRepeat;
     private Button btnRegister;
+
+    private Authentification auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +45,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = etUsername.getText().toString();
-                String email = etEmail.getText().toString();
-
                 if (validateInputs()) {
-                    Toast.makeText(RegisterActivity.this, "Register " + username + " with email " + email, Toast.LENGTH_SHORT).show();
+                    String username = etUsername.getText().toString();
+                    String email = etEmail.getText().toString();
+                    String password = etPassword.getText().toString();
+
+                    auth = new Authentification(RegisterActivity.this);
+                    auth.setOnFirebaseListener(RegisterActivity.this);
+                    auth.registerUser(username, email, password);
                 }
             }
         });
@@ -60,5 +70,15 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void onRegister(FirebaseUser user, String errorMessage) {
+        if (user != null) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 }
