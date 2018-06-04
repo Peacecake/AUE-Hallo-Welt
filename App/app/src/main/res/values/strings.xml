@@ -3,7 +3,16 @@
     <string name="welcome">Willkommen bei</string>
     <string name="subtitle">Kooperation für Integration </string>
     <string name="username">Nutzername</string>
+    <string name="email">E-Mail Adresse</string>
     <string name="password">Passwort</string>
+    <string name="passwordRepeat">Passwort Wiederholen</string>
     <string name="login">Anmelden</string>
     <string name="registerLink">Neu hier? Jetzt registrieren!</string>
+    <string name="registerHeader">Jetzt Registrieren</string>
+    <string name="finishRegister">Registrierung abschließen</string>
+
+
+    <string name="msgPasswordMatch">Passwörter stimmen nicht überein!</string>
+    <string name="msgInvalidEmail">Ungültige E-Mail Adresse!</string>
+    <string name="msgRequiredField">ist ein Pflichtfeld!</string>
 </resources>
