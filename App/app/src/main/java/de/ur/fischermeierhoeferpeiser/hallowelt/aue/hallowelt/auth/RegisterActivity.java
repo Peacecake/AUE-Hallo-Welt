@@ -8,9 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
@@ -73,12 +72,12 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
     }
 
     @Override
-    public void onRegister(FirebaseUser user, String errorMessage) {
-        if (user != null) {
+    public void onAuthEvent(AuthentificationResult authentificationResult) {
+        if (authentificationResult.wasSuccessful()) {
             Intent i = new Intent(this, ProfileActivity.class);
             startActivity(i);
         } else {
-            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

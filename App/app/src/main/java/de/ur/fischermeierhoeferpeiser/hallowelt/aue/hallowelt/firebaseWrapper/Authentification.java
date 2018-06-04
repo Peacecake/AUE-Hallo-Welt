@@ -11,6 +11,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult.AUTH_LOGIN;
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult.AUTH_REGISTER;
+
 public class Authentification {
     private FirebaseAuth auth;
     private Context context;
@@ -25,8 +28,29 @@ public class Authentification {
         this.listener = listener;
     }
 
+    public FirebaseUser getUser() {
+        return auth.getCurrentUser();
+    }
+
     public boolean isLoggedIn() {
         return auth.getCurrentUser() != null;
+    }
+
+    public void signOut() {
+        auth.signOut();
+    }
+
+    public void login(final String email, final String password) {
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, auth.getCurrentUser(), task.isSuccessful(), null));
+                } else {
+                    listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, auth.getCurrentUser(), task.isSuccessful(), task.getException().getMessage()));
+                }
+            }
+        });
     }
 
     public void registerUser(final String username, final String email, final String password) {
@@ -42,17 +66,16 @@ public class Authentification {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                listener.onRegister(auth.getCurrentUser(), null);
+                                listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, auth.getCurrentUser(), task.isSuccessful(), null));
                             } else {
-                                listener.onRegister(null, task.getException().getMessage());
+                                listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, auth.getCurrentUser(), task.isSuccessful(), task.getException().getMessage()));
                             }
                         }
                     });
                 } else {
-                    listener.onRegister(null, task.getException().getMessage());
+                    listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, auth.getCurrentUser(), task.isSuccessful(), task.getException().getMessage()));
                 }
             }
         });
     }
-
 }

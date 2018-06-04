@@ -9,23 +9,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.xml.validation.Validator;
-
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.ProfileActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.RegisterActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseListener {
 
-    private EditText etUsername;
+    private EditText etEmail;
     private EditText etPassword;
     private Button btnLogin;
     private TextView tvRegister;
+
+    Authentification auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initLayout();
         initListeners();
+        initAuthentification();
     }
 
     @Override
@@ -40,12 +45,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void initAuthentification() {
+        auth = new Authentification(this);
+        auth.setOnFirebaseListener(this);
+
+        if (auth.isLoggedIn()) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+        }
+    }
+
     private void initLayout() {
         setContentView(R.layout.activity_main);
-        etUsername = (EditText) findViewById(R.id.etUsername);
-        etPassword = (EditText) findViewById(R.id.etPassword);
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        tvRegister = (TextView) findViewById(R.id.tvRegister);
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        tvRegister = findViewById(R.id.tvRegister);
     }
 
     private void initListeners() {
@@ -55,11 +70,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loginUser() {
         FormValidator validator = new FormValidator(this);
-        if (validator.requiredFieldsAreEmpty(etUsername, etPassword)) {
+        validator.requiredFieldsAreEmpty(etEmail, etPassword);
+        validator.isValidEmail(etEmail.getText().toString());
+        if (!validator.isValid()) {
             Toast.makeText(this, validator.getErrorsAsString(), Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(this, "Login "+etUsername.getText()+" with password " + etPassword.getText() + "", Toast.LENGTH_SHORT).show();
+
+        auth.login(etEmail.getText().toString(), etPassword.getText().toString());
     }
 
     private void registerUser() {
@@ -68,4 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onAuthEvent(AuthentificationResult authentificationResult) {
+        if (authentificationResult.wasSuccessful()) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 }
