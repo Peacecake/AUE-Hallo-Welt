@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
         initLayout();
         initListeners();
         initAuthentification();
@@ -43,6 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 registerUser();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
     }
 
     private void initAuthentification() {
@@ -88,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAuthEvent(AuthentificationResult authentificationResult) {
-        if (authentificationResult.wasSuccessful()) {
+        if (authentificationResult.getUser() != null) {
             Intent i = new Intent(this, ProfileActivity.class);
             startActivity(i);
         } else {

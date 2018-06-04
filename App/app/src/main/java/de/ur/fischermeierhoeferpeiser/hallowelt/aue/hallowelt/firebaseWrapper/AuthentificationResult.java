@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class AuthentificationResult {
     public static final int AUTH_REGISTER = 0;
     public static final int AUTH_LOGIN = 1;
+    public static final int AUTH_LOGOUT = 2;
 
     private FirebaseUser user;
     private int type;
