@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Hallo Welt!</string>
+    <string name="welcome">Willkommen bei</string>
+    <string name="subtitle">Kooperation für Integration </string>
+    <string name="username">Nutzername</string>
+    <string name="password">Passwort</string>
+    <string name="login">Anmelden</string>
+    <string name="registerLink">Neu hier? Jetzt registrieren!</string>
 </resources>
