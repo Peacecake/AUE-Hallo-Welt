@@ -9,7 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import javax.xml.validation.Validator;
+
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.RegisterActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -51,6 +54,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void loginUser() {
+        FormValidator validator = new FormValidator(this);
+        if (validator.requiredFieldsAreEmpty(etUsername, etPassword)) {
+            Toast.makeText(this, validator.getErrorsAsString(), Toast.LENGTH_LONG).show();
+            return;
+        }
         Toast.makeText(this, "Login "+etUsername.getText()+" with password " + etPassword.getText() + "", Toast.LENGTH_SHORT).show();
     }
 

@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -48,39 +49,16 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean validateInputs() {
-        if (etUsername.getText().toString().equals("")) {
-            Toast.makeText(RegisterActivity.this, getString(R.string.username) + " " + getString(R.string.msgRequiredField), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (etEmail.getText().toString().equals("")) {
-            Toast.makeText(RegisterActivity.this, getString(R.string.email) + " " + getString(R.string.msgRequiredField), Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        FormValidator validator = new FormValidator(this);
+        validator.requiredFieldsAreEmpty(etUsername, etEmail, etPassword, etPasswordRepeat);
+        validator.isValidEmail(etEmail.getText().toString());
+        validator.passwortRepeatMatches(etPassword.getText().toString(), etPasswordRepeat.getText().toString());
 
-        if (etPassword.getText().toString().equals("")) {
-            Toast.makeText(RegisterActivity.this, getString(R.string.password) + " " + getString(R.string.msgRequiredField), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (etPasswordRepeat.getText().toString().equals("")) {
-            Toast.makeText(RegisterActivity.this, getString(R.string.passwordRepeat) + " " + getString(R.string.msgRequiredField), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!etPassword.getText().toString().equals(etPasswordRepeat.getText().toString())) {
-            Toast.makeText(RegisterActivity.this, getString(R.string.msgPasswordMatch), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!isValidEmail(etEmail.getText().toString())) {
-            Toast.makeText(RegisterActivity.this, getString(R.string.msgInvalidEmail), Toast.LENGTH_SHORT).show();
+        if (!validator.isValid()) {
+            Toast.makeText(this, validator.getErrorsAsString(), Toast.LENGTH_LONG).show();
             return false;
         }
 
         return true;
-    }
-
-    private boolean isValidEmail(String target) {
-        return target.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+");
     }
 }
