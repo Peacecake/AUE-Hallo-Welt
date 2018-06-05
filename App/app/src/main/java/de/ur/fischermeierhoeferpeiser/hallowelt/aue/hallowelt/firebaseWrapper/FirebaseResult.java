@@ -6,6 +6,7 @@ public class FirebaseResult {
     public static final int AUTH_LOGOUT = 2;
     public static final int DB_GET_LOCATION = 3;
     public static final int DB_GET_USER = 4;
+    public static final int DB_USER_CHECK_IN = 5;
 
     private int type;
     private boolean isSuccessful;

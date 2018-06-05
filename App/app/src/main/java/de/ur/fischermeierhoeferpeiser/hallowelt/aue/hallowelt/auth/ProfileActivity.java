@@ -29,6 +29,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Us
 
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_LOCATION;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_USER;
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_CHECK_IN;
 
 public class ProfileActivity extends AppCompatActivity implements FirebaseListener {
     private Button btnLogout;
@@ -82,15 +83,9 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
                 Post p = new Post("Meine Überschrift", "Das ist ein Test Post", user.getUsername());
                 Location l = new Location(42.0012, 11.4938, "TestLocation");
                 //db.addLocation(l);
-                /*db.addPost(l.getId(), p, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        Toast.makeText(ProfileActivity.this, "AddedPost", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
                 //db.getLocation(l.getId());
-                db.getUser(user.getId());
+                //db.getUser(user.getId());
+                db.checkInUser(user.getId(), l);
             }
         });
     }
@@ -118,6 +113,14 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
                 } else {
                     Log.e("ERROR", databaseResult.getErrorMessage());
                 }
+                break;
+            case DB_USER_CHECK_IN:
+                if (databaseResult.wasSuccessful()) {
+                    user.checkIn((Location) databaseResult.getDatabaseObject());
+                } else {
+                    Log.e("ERROR", databaseResult.getErrorMessage());
+                }
+                break;
         }
     }
 }

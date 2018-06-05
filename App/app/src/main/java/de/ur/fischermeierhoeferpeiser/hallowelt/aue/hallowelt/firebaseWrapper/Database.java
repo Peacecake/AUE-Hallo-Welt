@@ -4,18 +4,21 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Database extends FirebaseWrapper {
     private static final String LOCATIONS_REF = "Locations";
     private static final String USERS_REF = "Users";
     private static final String POSTS_REF = "Posts";
+    private static final String VISITED_REF = "VisitedLocations";
 
     private FirebaseDatabase db;
     private DatabaseReference locationsRef;
@@ -79,24 +82,49 @@ public class Database extends FirebaseWrapper {
         usersRef.child(id).addListenerForSingleValueEvent(listener);
     }
 
+    public void checkInUser(String userId, final Location location) {
+        usersRef.child(userId)
+                .child(VISITED_REF)
+                .child(location.getId())
+                .setValue(location)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, true, null, location));
+                        } else {
+                            listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, false, task.getException().getMessage(), location));
+                        }
+                    }
+        });
+    }
+
     public void getUser(String id) {
         usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, Object> result = (Map<String, Object>) dataSnapshot.getValue();
                 if (result != null) {
+                    User user;
                     String username = result.get("username").toString();
                     String id = result.get("id").toString();
                     String email = result.get("email").toString();
-                    if (result.containsKey("visitedLocations")) {
-                        Log.e("USER", "User has visitedLocations");
+
+                    if (result.containsKey(VISITED_REF)) {
+                        ArrayList<Location> mappedLocations = new ArrayList<>();
+                        Map<String, Object> locations = (Map<String, Object>) result.get(VISITED_REF);
+                        for(Map.Entry<String, Object> entry : locations.entrySet()) {
+                            Map singleLocation = (Map) entry.getValue();
+                            mappedLocations.add(getLocationFromMap(singleLocation));
+                        }
+                        user = new User(id, username, email, mappedLocations);
+                    } else {
+                        user = new User(id, username, email);
                     }
-                    User user = new User(id, username, email);
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, true, null, user));
                 } else {
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, "Nutzer nicht gefunden", null));
                 }
-
             }
 
             @Override
@@ -133,10 +161,12 @@ public class Database extends FirebaseWrapper {
         String name = map.get("name").toString();
         location = new Location(latitude, longitude, name);
 
-        Map<String, Object> posts = (Map<String, Object>) map.get("Posts");
-        for(Map.Entry<String, Object> entry : posts.entrySet()) {
-            Map singlePost = (Map) entry.getValue();
-            location.addPost(getPostFromMap(singlePost));
+        if (map.containsKey(POSTS_REF)) {
+            Map<String, Object> posts = (Map<String, Object>) map.get(POSTS_REF);
+            for(Map.Entry<String, Object> entry : posts.entrySet()) {
+                Map singlePost = (Map) entry.getValue();
+                location.addPost(getPostFromMap(singlePost));
+            }
         }
         return location;
     }
