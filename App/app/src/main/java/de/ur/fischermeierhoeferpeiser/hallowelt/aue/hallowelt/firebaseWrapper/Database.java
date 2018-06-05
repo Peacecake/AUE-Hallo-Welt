@@ -74,13 +74,22 @@ public class Database extends FirebaseWrapper {
         locationsRef.child(location.getId()).setValue(location);
     }
 
-    public void addPost(String locationId, Post newPost, OnCompleteListener listener) {
+    public void addPost(String locationId, final Post newPost) {
         locationsRef
             .child(locationId)
             .child(POSTS_REF)
             .child(newPost.getId())
             .setValue(newPost)
-            .addOnCompleteListener(listener);
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_ADD_POST, true, null, newPost));
+                    } else {
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_ADD_POST, false, task.getException().getMessage(), newPost));
+                    }
+                }
+            });
     }
 
     public void addUser(User user) {

@@ -8,6 +8,7 @@ public class FirebaseResult {
     public static final int DB_GET_USER = 4;
     public static final int DB_USER_CHECK_IN = 5;
     public static final int DB_GET_ALL_LOCATIONS = 6;
+    public static final int DB_ADD_POST = 7;
 
     private int type;
     private boolean isSuccessful;
