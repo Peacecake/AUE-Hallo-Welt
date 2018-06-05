@@ -23,6 +23,13 @@ public class User {
         checkedInLocation = null;
     }
 
+    public User(String id, String username, String email, ArrayList<Location> locations) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.visitedLocations = locations;
+    }
+
     public String getId() {
         return id;
     }

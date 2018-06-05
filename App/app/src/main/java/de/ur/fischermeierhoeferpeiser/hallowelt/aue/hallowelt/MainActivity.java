@@ -13,6 +13,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.ProfileActivi
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.RegisterActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.DatabaseResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 
@@ -106,5 +107,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onDatabaseEvent(DatabaseResult databaseResult) {
+
     }
 }

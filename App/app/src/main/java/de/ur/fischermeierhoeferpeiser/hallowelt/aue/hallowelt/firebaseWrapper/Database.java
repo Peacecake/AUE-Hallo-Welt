@@ -10,7 +10,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class Database {
+import java.util.Map;
+
+public class Database extends FirebaseWrapper {
     private static final String LOCATIONS_REF = "Locations";
     private static final String USERS_REF = "Users";
     private static final String POSTS_REF = "Posts";
@@ -20,6 +22,7 @@ public class Database {
     private DatabaseReference usersRef;
 
     public Database() {
+        super();
         db = FirebaseDatabase.getInstance();
         locationsRef = db.getReference(LOCATIONS_REF);
         usersRef = db.getReference(USERS_REF);
@@ -74,5 +77,75 @@ public class Database {
 
     public void getUser(String id, ValueEventListener listener) {
         usersRef.child(id).addListenerForSingleValueEvent(listener);
+    }
+
+    public void getUser(String id) {
+        usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String, Object> result = (Map<String, Object>) dataSnapshot.getValue();
+                if (result != null) {
+                    String username = result.get("username").toString();
+                    String id = result.get("id").toString();
+                    String email = result.get("email").toString();
+                    if (result.containsKey("visitedLocations")) {
+                        Log.e("USER", "User has visitedLocations");
+                    }
+                    User user = new User(id, username, email);
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, true, null, user));
+                } else {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, "Nutzer nicht gefunden", null));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, databaseError.getMessage(), null));
+            }
+        });
+    }
+
+    public void getLocation(String id) {
+        locationsRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String, Object> result = (Map<String, Object>) dataSnapshot.getValue();
+                if (result != null) {
+                    Location location = getLocationFromMap(result);
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_LOCATION, true, null, location));
+                } else {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_LOCATION, false, "Ort nicht gefunden", null));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_LOCATION, false, databaseError.getMessage(), null));
+            }
+        });
+    }
+
+    private Location getLocationFromMap(Map<String, Object> map) {
+        Location location;
+        double latitude = Double.parseDouble(map.get("latitude").toString());
+        double longitude = Double.parseDouble(map.get("longitude").toString());
+        String name = map.get("name").toString();
+        location = new Location(latitude, longitude, name);
+
+        Map<String, Object> posts = (Map<String, Object>) map.get("Posts");
+        for(Map.Entry<String, Object> entry : posts.entrySet()) {
+            Map singlePost = (Map) entry.getValue();
+            location.addPost(getPostFromMap(singlePost));
+        }
+        return location;
+    }
+
+    private Post getPostFromMap(Map post) {
+        String id = post.get("id").toString();
+        String header = post.get("header").toString();
+        String content = post.get("content").toString();
+        String author = post.get("authorUsername").toString();
+        return new Post(id, header, content, author);
     }
 }

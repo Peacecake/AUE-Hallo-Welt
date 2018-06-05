@@ -18,6 +18,13 @@ public class Post {
         this.id = Long.toString(System.currentTimeMillis());
     }
 
+    public Post(String id, String header, String content, String authorUsername) {
+        this.id = id;
+        this.header = header;
+        this.content = content;
+        this.authorUsername = authorUsername;
+    }
+
     public String getId() {
         return id;
     }

@@ -21,22 +21,19 @@ import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWra
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult.AUTH_LOGOUT;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult.AUTH_REGISTER;
 
-public class Authentification {
+public class Authentification extends FirebaseWrapper{
     private FirebaseAuth auth;
     private Context context;
-    private FirebaseListener listener;
     private Database db;
+
     private User currentUser;
 
     public Authentification(Context context) {
+        super();
         this.context = context;
         auth = FirebaseAuth.getInstance();
         db = new Database();
         currentUser = null;
-    }
-
-    public void setOnFirebaseListener(FirebaseListener listener) {
-        this.listener = listener;
     }
 
     public User getUser() {
