@@ -11,6 +11,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 
@@ -22,10 +25,14 @@ public class Authentification {
     private FirebaseAuth auth;
     private Context context;
     private FirebaseListener listener;
+    private Database db;
+    private User currentUser;
 
     public Authentification(Context context) {
         this.context = context;
         auth = FirebaseAuth.getInstance();
+        db = new Database();
+        currentUser = null;
     }
 
     public void setOnFirebaseListener(FirebaseListener listener) {
@@ -53,9 +60,20 @@ public class Authentification {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, auth.getCurrentUser(), task.isSuccessful(), null));
+                    db.getUser(auth.getCurrentUser().getUid(), new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            currentUser = dataSnapshot.getValue(User.class);
+                            listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, currentUser, true, null));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, null, false, databaseError.getMessage()));
+                        }
+                    });
                 } else {
-                    listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, auth.getCurrentUser(), task.isSuccessful(), task.getException().getMessage()));
+                    listener.onAuthEvent(new AuthentificationResult(AUTH_LOGIN, null, task.isSuccessful(), task.getException().getMessage()));
                 }
             }
         });
@@ -67,21 +85,11 @@ public class Authentification {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful())  {
                     FirebaseUser user = auth.getCurrentUser();
-                    UserProfileChangeRequest profileUpates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(username)
-                            .build();
-                    user.updateProfile(profileUpates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, auth.getCurrentUser(), task.isSuccessful(), null));
-                            } else {
-                                listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, auth.getCurrentUser(), task.isSuccessful(), task.getException().getMessage()));
-                            }
-                        }
-                    });
+                    User u = new User(user.getUid(), username, email);
+                    db.addUser(u);
+                    listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, u, task.isSuccessful(), null));
                 } else {
-                    listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, auth.getCurrentUser(), task.isSuccessful(), task.getException().getMessage()));
+                    listener.onAuthEvent(new AuthentificationResult(AUTH_REGISTER, null, task.isSuccessful(), task.getException().getMessage()));
                 }
             }
         });

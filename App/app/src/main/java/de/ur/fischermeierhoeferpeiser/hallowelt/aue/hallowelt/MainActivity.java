@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAuthEvent(AuthentificationResult authentificationResult) {
-        if (authentificationResult.getUser() != null) {
+        if (authentificationResult.wasSuccessful()) {
             Intent i = new Intent(this, ProfileActivity.class);
             startActivity(i);
         } else {

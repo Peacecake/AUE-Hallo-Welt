@@ -1,13 +1,19 @@
 package de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.ArrayList;
 
+@IgnoreExtraProperties
 public class User {
     private String id;
     private String username;
     private String email;
     private ArrayList<Location> visitedLocations;
     private Location checkedInLocation;
+
+    public User() {}
 
     public User(String id, String username, String email) {
         this.id = id;
@@ -33,6 +39,7 @@ public class User {
         return visitedLocations;
     }
 
+    @Exclude
     public Location getCurrentLocation() {
         return checkedInLocation;
     }

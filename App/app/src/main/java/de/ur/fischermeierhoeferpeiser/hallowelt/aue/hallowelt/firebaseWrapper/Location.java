@@ -1,16 +1,19 @@
 package de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.ArrayList;
 
+@IgnoreExtraProperties
 public class Location {
-    private String id;
-    private long latitude;
-    private long longitude;
+    private double latitude;
+    private double longitude;
     private String name;
     private ArrayList<Post> posts;
 
-    public Location(String id, long latitude, long longitude, String name) {
-        this.id = id;
+    public Location() {}
+
+    public Location(double latitude, double longitude, String name) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
@@ -26,18 +29,18 @@ public class Location {
     }
 
     public String getId() {
-        return id;
+        return Double.toString(latitude).replace(".", "") + "" + Double.toString(longitude).replace(".", "");
     }
 
     public String getName() {
         return name;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 }
