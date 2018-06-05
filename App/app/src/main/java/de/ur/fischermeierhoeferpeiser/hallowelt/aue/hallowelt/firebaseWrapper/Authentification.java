@@ -32,8 +32,12 @@ public class Authentification {
         this.listener = listener;
     }
 
-    public FirebaseUser getUser() {
-        return auth.getCurrentUser();
+    public User getUser() {
+        FirebaseUser u = auth.getCurrentUser();
+        if (u != null) {
+            return new User(u.getUid(), u.getDisplayName(), u.getEmail());
+        }
+        return null;
     }
 
     public boolean isLoggedIn() {

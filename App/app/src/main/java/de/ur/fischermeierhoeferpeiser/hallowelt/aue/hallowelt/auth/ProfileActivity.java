@@ -12,12 +12,13 @@ import com.google.firebase.auth.FirebaseUser;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.User;
 
 public class ProfileActivity extends AppCompatActivity {
     private Button btnLogout;
 
     private Authentification auth;
-    private FirebaseUser user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         auth = new Authentification(this);
         user = auth.getUser();
         if (user != null) {
-            Toast.makeText(this, "Username: " + user.getDisplayName() + "\nEmail: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Username: " + user.getUsername() + "\nEmail: " + user.getEmail(), Toast.LENGTH_SHORT).show();
         } else {
             goToLogin();
         }
