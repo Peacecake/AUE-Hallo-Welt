@@ -91,8 +91,10 @@ public class Database extends FirebaseWrapper {
         usersRef.child(id).addListenerForSingleValueEvent(listener);
     }
 
-    public void checkInUser(String userId, final Location location) {
-        usersRef.child(userId)
+    public void checkInUser(final Location location) {
+        Authentification auth = Authentification.getInstance();
+        final User user = auth.getUser();
+        usersRef.child(user.getId())
             .child(VISITED_REF)
             .child(location.getId())
             .setValue(location)
@@ -100,9 +102,10 @@ public class Database extends FirebaseWrapper {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, true, null, location));
+                        user.checkIn(location);
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, true, null, user));
                     } else {
-                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, false, task.getException().getMessage(), location));
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, false, task.getException().getMessage(), user));
                     }
                 }
         });
