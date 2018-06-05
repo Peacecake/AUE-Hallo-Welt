@@ -154,6 +154,31 @@ public class Database extends FirebaseWrapper {
         });
     }
 
+    public void getAllLocations() {
+        locationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String, Object> result = (Map<String, Object>) dataSnapshot.getValue();
+                if (result != null) {
+                    ArrayList<Location> locations = new ArrayList<>();
+                    for(Map.Entry<String, Object> entry : result.entrySet()) {
+                        Map singleLocation  = (Map) entry.getValue();
+                        Location l = getLocationFromMap(singleLocation);
+                        locations.add(l);
+                    }
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_ALL_LOCATIONS, true, null, locations));
+                } else {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_ALL_LOCATIONS, false, "Keine Orte gefunden", null));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_ALL_LOCATIONS, false, databaseError.getMessage(), null));
+            }
+        });
+    }
+
     private Location getLocationFromMap(Map<String, Object> map) {
         Location location;
         double latitude = Double.parseDouble(map.get("latitude").toString());

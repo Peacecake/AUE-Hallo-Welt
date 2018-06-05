@@ -16,6 +16,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
@@ -27,6 +30,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Lo
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Post;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.User;
 
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_ALL_LOCATIONS;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_LOCATION;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_USER;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_CHECK_IN;
@@ -85,7 +89,8 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
                 //db.addLocation(l);
                 //db.getLocation(l.getId());
                 //db.getUser(user.getId());
-                db.checkInUser(user.getId(), l);
+                //db.checkInUser(user.getId(), l);
+                db.getAllLocations();
             }
         });
     }
@@ -121,6 +126,13 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
                     Log.e("ERROR", databaseResult.getErrorMessage());
                 }
                 break;
+            case DB_GET_ALL_LOCATIONS:
+                if (databaseResult.wasSuccessful()) {
+                    ArrayList<Location> locations = (ArrayList<Location>) databaseResult.getDatabaseObject();
+                    Log.e("Success", "Got all locations");
+                } else {
+                    Log.e("ERROR", databaseResult.getErrorMessage());
+                }
         }
     }
 }
