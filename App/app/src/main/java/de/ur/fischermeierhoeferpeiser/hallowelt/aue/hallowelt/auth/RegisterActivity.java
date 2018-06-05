@@ -50,7 +50,8 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
                     String email = etEmail.getText().toString();
                     String password = etPassword.getText().toString();
 
-                    auth = new Authentification(RegisterActivity.this);
+                    auth = Authentification.getInstance();
+                    auth.setContext(RegisterActivity.this);
                     auth.setOnFirebaseListener(RegisterActivity.this);
                     auth.registerUser(username, email, password);
                 }

@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initAuthentification() {
-        auth = new Authentification(this);
+        auth = Authentification.getInstance();
+        auth.setContext(this);
         auth.setOnFirebaseListener(this);
 
         if (auth.isLoggedIn()) {

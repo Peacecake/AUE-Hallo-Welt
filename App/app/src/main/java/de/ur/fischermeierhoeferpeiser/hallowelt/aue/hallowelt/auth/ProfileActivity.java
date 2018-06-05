@@ -46,14 +46,15 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUi();
-        db = new Database();
+        db = Database.getInstance();
         db.setOnFirebaseListener(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        auth = new Authentification(this);
+        auth = Authentification.getInstance();
+        auth.setContext(this);
         user = auth.getUser();
         if (user != null) {
             Toast.makeText(this, "Username: " + user.getUsername() + "\nEmail: " + user.getEmail(), Toast.LENGTH_SHORT).show();

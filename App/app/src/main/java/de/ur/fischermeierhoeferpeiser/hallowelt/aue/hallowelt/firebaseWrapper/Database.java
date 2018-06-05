@@ -24,12 +24,21 @@ public class Database extends FirebaseWrapper {
     private DatabaseReference locationsRef;
     private DatabaseReference usersRef;
 
-    public Database() {
+    private static Database instance;
+
+    private Database() {
         super();
         db = FirebaseDatabase.getInstance();
         locationsRef = db.getReference(LOCATIONS_REF);
         usersRef = db.getReference(USERS_REF);
         handleUpdates();
+    }
+
+    public static Database getInstance() {
+        if (instance == null) {
+            instance = new Database();
+        }
+        return instance;
     }
 
     private void handleUpdates() {
@@ -67,11 +76,11 @@ public class Database extends FirebaseWrapper {
 
     public void addPost(String locationId, Post newPost, OnCompleteListener listener) {
         locationsRef
-                .child(locationId)
-                .child(POSTS_REF)
-                .child(newPost.getId())
-                .setValue(newPost)
-                .addOnCompleteListener(listener);
+            .child(locationId)
+            .child(POSTS_REF)
+            .child(newPost.getId())
+            .setValue(newPost)
+            .addOnCompleteListener(listener);
     }
 
     public void addUser(User user) {
@@ -84,18 +93,18 @@ public class Database extends FirebaseWrapper {
 
     public void checkInUser(String userId, final Location location) {
         usersRef.child(userId)
-                .child(VISITED_REF)
-                .child(location.getId())
-                .setValue(location)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, true, null, location));
-                        } else {
-                            listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, false, task.getException().getMessage(), location));
-                        }
+            .child(VISITED_REF)
+            .child(location.getId())
+            .setValue(location)
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, true, null, location));
+                    } else {
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, false, task.getException().getMessage(), location));
                     }
+                }
         });
     }
 

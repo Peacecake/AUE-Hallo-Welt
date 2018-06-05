@@ -28,19 +28,30 @@ public class Authentification extends FirebaseWrapper{
 
     private User currentUser;
 
-    public Authentification(Context context) {
+    private static Authentification instance;
+
+    private Authentification() {
         super();
-        this.context = context;
         auth = FirebaseAuth.getInstance();
-        db = new Database();
+        db = Database.getInstance();
         currentUser = null;
     }
 
-    public User getUser() {
-        FirebaseUser u = auth.getCurrentUser();
-        if (u != null) {
-            return new User(u.getUid(), u.getDisplayName(), u.getEmail());
+    public static Authentification getInstance() {
+        if (instance == null) {
+            instance = new Authentification();
         }
+
+        return instance;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public User getUser() {
+        if (auth.getCurrentUser() != null)
+            return currentUser;
         return null;
     }
 
