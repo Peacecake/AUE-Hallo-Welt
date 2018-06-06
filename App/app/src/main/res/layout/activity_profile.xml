@@ -8,10 +8,63 @@
     android:orientation="vertical"
     >
 
-    <TextView
+    <TableLayout
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:stretchColumns="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Profil"/>
+        android:layout_marginBottom="20sp"
+        android:layout_marginTop="10sp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10sp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/username"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                />
+
+            <TextView
+                android:id="@+id/tvProfileUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:text="@string/placeholder"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text="@string/email"
+                android:layout_column="1"
+                />
+
+            <TextView
+                android:id="@+id/tvProfileEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder"
+                android:layout_column="2"
+                />
+
+        </TableRow>
+    </TableLayout>
 
     <Button
         android:id="@+id/btnLogout"
@@ -19,10 +72,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btnTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"/>
 
 </LinearLayout>

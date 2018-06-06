@@ -12,6 +12,8 @@
     <string name="registerHeader">Jetzt Registrieren</string>
     <string name="finishRegister">Registrierung abschließen</string>
 
+    <string name="placeholder">-</string>
+
 
     <string name="msgPasswordMatch">Passwörter stimmen nicht überein!</string>
     <string name="msgInvalidEmail">Ungültige E-Mail Adresse!</string>

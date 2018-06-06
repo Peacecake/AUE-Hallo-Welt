@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +38,8 @@ import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWra
 
 public class ProfileActivity extends AppCompatActivity implements FirebaseListener {
     private Button btnLogout;
+    private TextView tvUsername;
+    private TextView tvEmail;
 
     private Authentification auth;
     private Database db;
@@ -57,10 +60,15 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
         auth.setContext(this);
         user = auth.getUser();
         if (user != null) {
-            Toast.makeText(this, "Username: " + user.getUsername() + "\nEmail: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+            updateUserProfile();
         } else {
             goToLogin();
         }
+    }
+
+    private void updateUserProfile() {
+        tvUsername.setText(user.getUsername());
+        tvEmail.setText(user.getEmail());
     }
 
     private void goToLogin() {
@@ -72,26 +80,14 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
     private void initUi() {
         setContentView(R.layout.activity_profile);
         btnLogout = findViewById(R.id.btnLogout);
+        tvEmail = findViewById(R.id.tvProfileEmail);
+        tvUsername = findViewById(R.id.tvProfileUsername);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 auth.signOut();
                 goToLogin();
-            }
-        });
-
-        Button btnTest = findViewById(R.id.btnTest);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Post p = new Post("Meine Überschrift", "Das ist ein Test Post", user.getUsername());
-                Location l = new Location(42.0012, 11.4938, "TestLocation");
-                //db.addLocation(l);
-                //db.getLocation(l.getId());
-                //db.getUser(user.getId());
-                //db.checkInUser(user.getId(), l);
-                db.getAllLocations();
             }
         });
     }
