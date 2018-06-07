@@ -14,6 +14,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Au
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.DatabaseResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader;
 
 public class RegisterActivity extends AppCompatActivity implements FirebaseListener {
 
@@ -22,6 +23,7 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
     private EditText etPassword;
     private EditText etPasswordRepeat;
     private Button btnRegister;
+    private Loader loader;
 
     private Authentification auth;
 
@@ -34,11 +36,13 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
 
     private void initUi() {
         setContentView(R.layout.activity_register);
+        loader = findViewById(R.id.registerLoader);
         etUsername = findViewById(R.id.etRegisterUsername);
         etEmail = findViewById(R.id.etRegisterEmail);
         etPassword = findViewById(R.id.etRegisterPassword);
         etPasswordRepeat = findViewById(R.id.etRegisterPasswordRepeat);
         btnRegister = findViewById(R.id.btnRegister);
+        btnRegister.setEnabled(true);
     }
 
     private void initListeners() {
@@ -46,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
+                    btnRegister.setEnabled(false);
+                    loader.setLoading(true);
                     String username = etUsername.getText().toString();
                     String email = etEmail.getText().toString();
                     String password = etPassword.getText().toString();
@@ -81,6 +87,8 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
         }
+        btnRegister.setEnabled(true);
+        loader.setLoading(false);
     }
 
     @Override

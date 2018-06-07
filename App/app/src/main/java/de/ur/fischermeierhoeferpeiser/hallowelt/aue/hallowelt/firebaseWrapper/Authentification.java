@@ -49,10 +49,8 @@ public class Authentification extends FirebaseWrapper{
         this.context = context;
     }
 
-    public User getUser() {
-        if (auth.getCurrentUser() != null)
-            return currentUser;
-        return null;
+    public FirebaseUser getUser() {
+        return auth.getCurrentUser();
     }
 
     public boolean isLoggedIn() {

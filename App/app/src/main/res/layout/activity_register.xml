@@ -54,4 +54,9 @@
         android:background="@color/colorAccent"
         />
 
+    <de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader
+        android:id="@+id/registerLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -100,9 +101,7 @@ public class Database extends FirebaseWrapper {
         usersRef.child(id).addListenerForSingleValueEvent(listener);
     }
 
-    public void checkInUser(final Location location) {
-        Authentification auth = Authentification.getInstance();
-        final User user = auth.getUser();
+    public void checkInUser(final User user, final Location location) {
         usersRef.child(user.getId())
             .child(VISITED_REF)
             .child(location.getId())

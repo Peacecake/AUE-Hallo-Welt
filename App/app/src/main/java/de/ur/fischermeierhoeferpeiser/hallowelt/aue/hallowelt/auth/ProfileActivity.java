@@ -58,12 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
         super.onStart();
         auth = Authentification.getInstance();
         auth.setContext(this);
-        user = auth.getUser();
-        if (user != null) {
-            updateUserProfile();
-        } else {
-            goToLogin();
-        }
+        db.getUser(auth.getUser().getUid());
     }
 
     private void updateUserProfile() {
@@ -110,10 +105,10 @@ public class ProfileActivity extends AppCompatActivity implements FirebaseListen
                 break;
             case DB_GET_USER:
                 if (databaseResult.wasSuccessful()) {
-                    User u = (User) databaseResult.getDatabaseObject();
-                    Log.e("GET_USER", "SUCCESS");
+                    user = (User) databaseResult.getDatabaseObject();
+                    updateUserProfile();
                 } else {
-                    Log.e("ERROR", databaseResult.getErrorMessage());
+                    goToLogin();
                 }
                 break;
             case DB_USER_CHECK_IN:

@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Au
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.DatabaseResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseListener {
 
@@ -23,8 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText etPassword;
     private Button btnLogin;
     private TextView tvRegister;
+    private Loader loader;
 
-    Authentification auth;
+    private Authentification auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogin:
+                setLoading(true);
                 loginUser();
                 break;
             case R.id.tvRegister:
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initLayout() {
         setContentView(R.layout.activity_main);
+        loader = findViewById(R.id.loginLoader);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -80,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initListeners() {
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+    }
+
+    private void setLoading(boolean isLoading) {
+        btnLogin.setEnabled(!isLoading);
+        loader.setLoading(isLoading);
     }
 
     private void loginUser() {
@@ -108,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_LONG).show();
         }
+        setLoading(false);
     }
 
     @Override
