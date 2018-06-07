@@ -45,6 +45,14 @@ public class Authentification extends FirebaseWrapper{
         return instance;
     }
 
+    public void setOnAuthStateChangeListener(FirebaseAuth.AuthStateListener listener) {
+        auth.addAuthStateListener(listener);
+    }
+
+    public void removeOnAuthStateChangeListener(FirebaseAuth.AuthStateListener listener) {
+        auth.removeAuthStateListener(listener);
+    }
+
     public void setContext(Context context) {
         this.context = context;
     }

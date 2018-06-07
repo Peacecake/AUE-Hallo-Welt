@@ -18,17 +18,15 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Au
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.DatabaseResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseListener {
-
+public class MainActivity extends HelloWorldActivity implements View.OnClickListener {
     private EditText etEmail;
     private EditText etPassword;
     private Button btnLogin;
     private TextView tvRegister;
-    private Loader loader;
 
-    private Authentification auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +36,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         initLayout();
         initListeners();
-        initAuthentification();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (auth.isLoggedIn()) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogin:
-                setLoading(true);
+                this.setLoading(true, btnLogin);
                 loginUser();
                 break;
             case R.id.tvRegister:
@@ -63,20 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    private void initAuthentification() {
-        auth = Authentification.getInstance();
-        auth.setContext(this);
-        auth.setOnFirebaseListener(this);
-
-        if (auth.isLoggedIn()) {
-            Intent i = new Intent(this, ProfileActivity.class);
-            startActivity(i);
-        }
-    }
-
     private void initLayout() {
         setContentView(R.layout.activity_main);
-        loader = findViewById(R.id.loginLoader);
+        initLoader(R.id.loginLoader);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -88,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvRegister.setOnClickListener(this);
     }
 
-    private void setLoading(boolean isLoading) {
-        btnLogin.setEnabled(!isLoading);
-        loader.setLoading(isLoading);
-    }
 
     private void loginUser() {
         FormValidator validator = new FormValidator(this);
@@ -108,22 +99,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void registerUser() {
         Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
-
     }
 
     @Override
     public void onAuthEvent(AuthentificationResult authentificationResult) {
+        super.onAuthEvent(authentificationResult);
+        setLoading(false, btnLogin);
         if (authentificationResult.wasSuccessful()) {
-            Intent i = new Intent(this, ProfileActivity.class);
-            startActivity(i);
+            startActivity(new Intent(this, ProfileActivity.class));
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_LONG).show();
         }
-        setLoading(false);
     }
 
     @Override
     public void onDatabaseEvent(DatabaseResult databaseResult) {
-
+        super.onDatabaseEvent(databaseResult);
     }
 }

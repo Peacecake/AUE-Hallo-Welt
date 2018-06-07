@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +8,7 @@
     >
 
     <TableLayout
+        android:id="@+id/tlUserInfo"
         android:paddingLeft="5sp"
         android:paddingRight="5sp"
         android:stretchColumns="1"
@@ -67,10 +67,16 @@
     </TableLayout>
 
     <Button
+        android:layout_below="@id/tlUserInfo"
         android:id="@+id/btnLogout"
         android:text="@string/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader
+        android:id="@+id/profileLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-</LinearLayout>
+
+</RelativeLayout>

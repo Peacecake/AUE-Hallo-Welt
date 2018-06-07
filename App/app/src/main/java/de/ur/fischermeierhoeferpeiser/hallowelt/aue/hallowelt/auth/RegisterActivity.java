@@ -1,7 +1,6 @@
 package de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,31 +11,27 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.DatabaseResult;
-import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseListener;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
-import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
 
-public class RegisterActivity extends AppCompatActivity implements FirebaseListener {
-
+public class RegisterActivity extends HelloWorldActivity {
     private EditText etUsername;
     private EditText etEmail;
     private EditText etPassword;
     private EditText etPasswordRepeat;
     private Button btnRegister;
-    private Loader loader;
 
-    private Authentification auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUi();
+        initLoader(R.id.registerLoader);
         initListeners();
     }
 
     private void initUi() {
         setContentView(R.layout.activity_register);
-        loader = findViewById(R.id.registerLoader);
         etUsername = findViewById(R.id.etRegisterUsername);
         etEmail = findViewById(R.id.etRegisterEmail);
         etPassword = findViewById(R.id.etRegisterPassword);
@@ -50,8 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    btnRegister.setEnabled(false);
-                    loader.setLoading(true);
+                    setLoading(true, btnRegister);
                     String username = etUsername.getText().toString();
                     String email = etEmail.getText().toString();
                     String password = etPassword.getText().toString();
@@ -81,18 +75,18 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseListe
 
     @Override
     public void onAuthEvent(AuthentificationResult authentificationResult) {
+        super.onAuthEvent(authentificationResult);
+        setLoading(false, btnRegister);
         if (authentificationResult.wasSuccessful()) {
             Intent i = new Intent(this, ProfileActivity.class);
             startActivity(i);
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
         }
-        btnRegister.setEnabled(true);
-        loader.setLoading(false);
     }
 
     @Override
     public void onDatabaseEvent(DatabaseResult databaseResult) {
-
+        super.onDatabaseEvent(databaseResult);
     }
 }
