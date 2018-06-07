@@ -49,10 +49,9 @@ public class ProfileActivity extends HelloWorldActivity {
 
     private void initUi() {
         setContentView(R.layout.activity_profile);
-        btnLogout = findViewById(R.id.btnLogout);
         tvEmail = findViewById(R.id.tvProfileEmail);
         tvUsername = findViewById(R.id.tvProfileUsername);
-
+        btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,44 +60,23 @@ public class ProfileActivity extends HelloWorldActivity {
         });
     }
 
+
     @Override
-    public void onAuthEvent(AuthentificationResult authentificationResult) {
-        super.onAuthEvent(authentificationResult);
+    protected void onUserRetrieved(User user) {
+        super.onUserRetrieved(user);
+        setLoading(false);
+        this.user = user;
+        updateUserProfile();
     }
 
     @Override
-    public void onDatabaseEvent(DatabaseResult databaseResult) {
-        super.onDatabaseEvent(databaseResult);
+    protected void onDatabaseError(String errorMessage) {
+        super.onDatabaseError(errorMessage);
         setLoading(false);
-        switch (databaseResult.getType()) {
-            case DB_GET_LOCATION:
-                if (databaseResult.wasSuccessful()) {
-                    Location location = (Location) databaseResult.getDatabaseObject();
-                    Log.e("SUCCESS", "SUCCESS");
-                } else {
-                    Log.e("ERROR", databaseResult.getErrorMessage());
-                }
-                break;
-            case DB_GET_USER:
-                if (databaseResult.wasSuccessful()) {
-                    user = (User) databaseResult.getDatabaseObject();
-                    updateUserProfile();
-                }
-                break;
-            case DB_USER_CHECK_IN:
-                if (databaseResult.wasSuccessful()) {
-                    user.checkIn((Location) databaseResult.getDatabaseObject());
-                } else {
-                    Log.e("ERROR", databaseResult.getErrorMessage());
-                }
-                break;
-            case DB_GET_ALL_LOCATIONS:
-                if (databaseResult.wasSuccessful()) {
-                    ArrayList<Location> locations = (ArrayList<Location>) databaseResult.getDatabaseObject();
-                    Log.e("Success", "Got all locations");
-                } else {
-                    Log.e("ERROR", databaseResult.getErrorMessage());
-                }
-        }
+    }
+
+    @Override
+    public void onAuthEvent(AuthentificationResult authentificationResult) {
+        super.onAuthEvent(authentificationResult);
     }
 }

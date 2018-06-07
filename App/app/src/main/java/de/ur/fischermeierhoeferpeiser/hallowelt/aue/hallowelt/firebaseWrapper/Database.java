@@ -143,7 +143,7 @@ public class Database extends FirebaseWrapper {
                     }
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, true, null, user));
                 } else {
-                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, "Nutzer nicht gefunden", null));
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, "Nutzerprofil nicht gefunden", null));
                 }
             }
 
