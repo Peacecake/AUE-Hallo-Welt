@@ -32,6 +32,7 @@ public class RegisterActivity extends HelloWorldActivity {
 
     private void initUi() {
         setContentView(R.layout.activity_register);
+        setTitle(getString(R.string.registerHeader));
         etUsername = findViewById(R.id.etRegisterUsername);
         etEmail = findViewById(R.id.etRegisterEmail);
         etPassword = findViewById(R.id.etRegisterPassword);

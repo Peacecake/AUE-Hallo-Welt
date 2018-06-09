@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +16,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.ProfileActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Database;
@@ -50,6 +55,27 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
         auth.removeOnAuthStateChangeListener(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.default_top_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.miProfile:
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            case R.id.miSignOut:
+                auth.signOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     /**
      * If you want to use the loader, run this in OnCreate or onStart of your Activity. The root layout of
      * your Activity should be a RelativeLayout. Put the Loader Component to the bottom of your Activity Layout,
@@ -63,13 +89,15 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
     /**
      * Starts MainActivity if user is currently not logged in or the authentification state changes to logged out.
      * Use this in the onStart method at the earliest, otherwise app will crash with NullPointerException.
+     * @return true if user is currently logged in
      */
-    protected void setLoginProtected() {
+    protected boolean setLoginProtected() {
         if (auth.getUser() == null) {
             goToLogin();
+            return false;
         }
-
         auth.setOnAuthStateChangeListener(this);
+        return true;
     }
 
     private void goToLogin() {

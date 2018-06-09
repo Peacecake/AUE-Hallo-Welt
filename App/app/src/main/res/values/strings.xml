@@ -6,11 +6,13 @@
     <string name="email">E-Mail Adresse</string>
     <string name="password">Passwort</string>
     <string name="passwordRepeat">Passwort Wiederholen</string>
+    <string name="profile">Profil</string>
     <string name="login">Anmelden</string>
     <string name="logout">Abmelden</string>
     <string name="registerLink">Neu hier? Jetzt registrieren!</string>
     <string name="registerHeader">Jetzt Registrieren</string>
     <string name="finishRegister">Registrierung abschließen</string>
+    <string name="visitedLocations">Besuchte Orte</string>
 
     <string name="placeholder">-</string>
 
