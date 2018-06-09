@@ -52,13 +52,16 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        auth.removeOnAuthStateChangeListener(this);
+        if (auth != null)
+            auth.removeOnAuthStateChangeListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.default_top_menu, menu);
+        if (auth.isLoggedIn()) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.default_top_menu, menu);
+        }
         return true;
     }
 
@@ -147,6 +150,7 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
         if (firebaseAuth.getCurrentUser() == null) {
             goToLogin();
         }
+        invalidateOptionsMenu();
     }
 
     @Override
