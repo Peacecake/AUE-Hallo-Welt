@@ -63,3 +63,4 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+App/app/src/debug/res/values/google_maps_api.xml
