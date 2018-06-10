@@ -20,6 +20,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Fi
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.map.MapsActivity;
 
 public class MainActivity extends HelloWorldActivity implements View.OnClickListener {
     private EditText etEmail;
@@ -42,7 +43,7 @@ public class MainActivity extends HelloWorldActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
         if (auth.isLoggedIn()) {
-            Intent i = new Intent(this, ProfileActivity.class);
+            Intent i = new Intent(this, MapsActivity.class);
             startActivity(i);
         }
     }
