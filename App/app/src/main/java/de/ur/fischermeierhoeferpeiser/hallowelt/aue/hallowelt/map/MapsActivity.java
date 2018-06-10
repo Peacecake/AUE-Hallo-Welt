@@ -98,7 +98,7 @@ public class MapsActivity extends HelloWorldActivity
     public void onBackPressed() {
         super.onBackPressed();
         if (auth.isLoggedIn()) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, MapsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("EXIT", true);
             startActivity(intent);
