@@ -30,6 +30,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.CameraActivity;
@@ -47,7 +51,7 @@ public class MapsActivity extends HelloWorldActivity
         OnMyLocationClickListener,
         OnMapReadyCallback,
         GoogleMap.OnInfoWindowClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
 
     /**
      * Request code for location permission request.
@@ -64,6 +68,9 @@ public class MapsActivity extends HelloWorldActivity
     private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
+    private Map<Marker, de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location> markerMap;
+    private de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location activatedLocation;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +80,18 @@ public class MapsActivity extends HelloWorldActivity
         }
 
         setContentView(R.layout.activity_maps);
+        setTitle(getString(R.string.overview));
+        markerMap = new HashMap<>();
+        activatedLocation = null;
 
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        //.setAction("Action", null).show();
-                // Intent i = new Intent(MapsActivity.this, CameraActivity.class);
-                // startActivity(i);
-
-                // This fixed the firebase redirect problem: Open camera directly, if comera gets closed onActivityResult is called
+                // This fixed the firebase redirect problem: Open camera directly, if camera gets closed onActivityResult is called
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQ);
             }
@@ -98,7 +102,7 @@ public class MapsActivity extends HelloWorldActivity
     public void onBackPressed() {
         super.onBackPressed();
         if (auth.isLoggedIn()) {
-            Intent intent = new Intent(this, MapsActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("EXIT", true);
             startActivity(intent);
@@ -107,8 +111,14 @@ public class MapsActivity extends HelloWorldActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        setLoading(false, fab);
         if (requestCode == CAMERA_REQ && resultCode ==RESULT_OK) {
             Log.e("Picture", "Bild ist gemacht!");
+            if (activatedLocation != null) {
+                /**
+                 * TODO: Check in user, in onUserCheckedIn callback: Go to post list of activatedLocation
+                 */
+            }
         }
     }
 
@@ -116,14 +126,44 @@ public class MapsActivity extends HelloWorldActivity
     protected void onStart() {
         super.onStart();
         setLoginProtected();
+        initLoader(R.id.mapsLoader);
+    }
+
+    @Override
+    protected void onUserCheckedIn(de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location location) {
+        super.onUserCheckedIn(location);
+        /**
+         * TODO: go to Post List Activity and pass id of location as extra
+         */
+    }
+
+    @Override
+    protected void onAllLocationsRetrieved(ArrayList<de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location> locations) {
+        super.onAllLocationsRetrieved(locations);
+        for(de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location location : locations) {
+            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            Marker m = mMap.addMarker(new MarkerOptions().position(position).title(location.getName()));
+            Circle c = mMap.addCircle(new CircleOptions()
+                    .center(position)
+                    .radius(100)
+                    .strokeColor(getColor(R.color.colorPrimary)));
+            markerMap.put(m, location);
+        }
+        setLoading(false, fab);
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
+        if (db != null) {
+            setLoading(true, fab);
+            db.getAllLocations();
+        }
+
         mMap = map;
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMarkerClickListener(this);
 
-        LatLng westbad = new LatLng(49.024540, 12.054830);
+        /* LatLng westbad = new LatLng(49.024540, 12.054830);
         LatLng neupfarrplatz = new LatLng(49.018618, 12.096435);
         LatLng steinerneBruecke = new LatLng(49.021974, 12.097153);
 
@@ -146,6 +186,7 @@ public class MapsActivity extends HelloWorldActivity
                 .radius(100)
                 .strokeColor(Color.RED));
 
+        */
 
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
@@ -220,5 +261,11 @@ public class MapsActivity extends HelloWorldActivity
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        activatedLocation = markerMap.get(marker);
+        return false;
     }
 }
