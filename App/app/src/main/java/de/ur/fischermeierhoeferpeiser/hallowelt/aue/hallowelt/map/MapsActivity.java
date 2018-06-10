@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.CameraActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
@@ -67,6 +68,10 @@ public class MapsActivity extends HelloWorldActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
+
         setContentView(R.layout.activity_maps);
 
         SupportMapFragment mapFragment =
@@ -90,10 +95,27 @@ public class MapsActivity extends HelloWorldActivity
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (auth.isLoggedIn()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQ && resultCode ==RESULT_OK) {
             Log.e("Picture", "Bild ist gemacht!");
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setLoginProtected();
     }
 
     @Override

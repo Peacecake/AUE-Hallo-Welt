@@ -107,7 +107,7 @@ public class MainActivity extends HelloWorldActivity implements View.OnClickList
         super.onAuthEvent(authentificationResult);
         setLoading(false, btnLogin);
         if (authentificationResult.wasSuccessful()) {
-            startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, MapsActivity.class));
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_LONG).show();
         }
