@@ -26,11 +26,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.CameraActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
 
 /**
  * This demo shows how GMS Location can be used to check for changes to the users location.  The
@@ -38,7 +40,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.CameraActiv
  * Permission for {@link android.Manifest.permission#ACCESS_FINE_LOCATION} is requested at run
  * time. If the permission has not been granted, the Activity is finished with an error message.
  */
-public class MapsActivity extends AppCompatActivity
+public class MapsActivity extends HelloWorldActivity
         implements
         OnMyLocationButtonClickListener,
         OnMyLocationClickListener,
@@ -52,6 +54,7 @@ public class MapsActivity extends AppCompatActivity
      * @see #onRequestPermissionsResult(int, String[], int[])
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int CAMERA_REQ = 2;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -76,10 +79,21 @@ public class MapsActivity extends AppCompatActivity
             public void onClick(View view) {
                 //Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
                         //.setAction("Action", null).show();
-                Intent i = new Intent(MapsActivity.this, CameraActivity.class);
-                startActivity(i);
+                // Intent i = new Intent(MapsActivity.this, CameraActivity.class);
+                // startActivity(i);
+
+                // This fixed the firebase redirect problem: Open camera directly, if comera gets closed onActivityResult is called
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQ);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQ && resultCode ==RESULT_OK) {
+            Log.e("Picture", "Bild ist gemacht!");
+        }
     }
 
     @Override
