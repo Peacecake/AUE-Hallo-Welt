@@ -109,7 +109,7 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
     }
 
     /**
-     * Call this method at the beginning and the end of an async operation. If some View elements sould be disabled while loading
+     * Call this method at the beginning and the end of an async operation. If some View elements should be disabled while loading
      * (for example the button that triggered the operation) you can pass them as well.
      * @param isLoading true if loading starts, else false
      * @param disableOnLoadViews optional. Any number of View elements that should be disabled while loading
