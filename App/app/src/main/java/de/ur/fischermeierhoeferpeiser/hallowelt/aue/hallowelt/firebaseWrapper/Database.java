@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class Database extends FirebaseWrapper {
@@ -71,8 +72,17 @@ public class Database extends FirebaseWrapper {
         });
     }
 
-    public void addLocation(Location location) {
-        locationsRef.child(location.getId()).setValue(location);
+    public void addLocation(final Location location) {
+        locationsRef.child(location.getId()).setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_LOCATION_ADDED, true ,null, location));
+                } else {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_LOCATION_ADDED, false, task.getException().getMessage(), location));
+                }
+            }
+        });
     }
 
     public void addPost(String locationId, final Post newPost) {
@@ -204,7 +214,8 @@ public class Database extends FirebaseWrapper {
         double latitude = Double.parseDouble(map.get("latitude").toString());
         double longitude = Double.parseDouble(map.get("longitude").toString());
         String name = map.get("name").toString();
-        location = new Location(latitude, longitude, name);
+        String description = map.containsKey("description") ? map.get("description").toString() : "";
+        location = new Location(latitude, longitude, name, description);
 
         if (map.containsKey(POSTS_REF)) {
             Map<String, Object> posts = (Map<String, Object>) map.get(POSTS_REF);
@@ -221,6 +232,7 @@ public class Database extends FirebaseWrapper {
         String header = post.get("header").toString();
         String content = post.get("content").toString();
         String author = post.get("authorUsername").toString();
-        return new Post(id, header, content, author);
+        Date date = post.containsKey("date") ? new Date(Long.parseLong(post.get("date").toString())) : new Date();
+        return new Post(id, header, content, author, date);
     }
 }

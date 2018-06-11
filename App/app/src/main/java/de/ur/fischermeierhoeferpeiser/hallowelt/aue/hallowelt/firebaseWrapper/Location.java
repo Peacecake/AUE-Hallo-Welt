@@ -6,17 +6,21 @@ import java.util.ArrayList;
 
 @IgnoreExtraProperties
 public class Location {
+    private String id;
     private double latitude;
     private double longitude;
     private String name;
+    private String description;
     private ArrayList<Post> posts;
 
     public Location() {}
 
-    public Location(double latitude, double longitude, String name) {
+    public Location(double latitude, double longitude, String name, String description) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
+        this.description = description;
+        this.id = Double.toString(latitude).replace(".", "") + "" + Double.toString(longitude).replace(".", "");
         posts = new ArrayList<>();
     }
 
@@ -29,7 +33,11 @@ public class Location {
     }
 
     public String getId() {
-        return Double.toString(latitude).replace(".", "") + "" + Double.toString(longitude).replace(".", "");
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getName() {

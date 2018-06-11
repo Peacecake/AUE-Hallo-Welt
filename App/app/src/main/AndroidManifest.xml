@@ -50,7 +50,8 @@
         <activity android:name=".scanner.CameraScannerActivity" />
         <activity android:name=".scanner.CameraPreviewActivity" />
         <activity android:name=".camera.CameraActivity" />
-        <activity android:name=".camera.FakeCameraActivity"></activity>
+        <activity android:name=".camera.FakeCameraActivity" />
+        <activity android:name=".helpers.SetupActivity"></activity>
     </application>
 
 </manifest>

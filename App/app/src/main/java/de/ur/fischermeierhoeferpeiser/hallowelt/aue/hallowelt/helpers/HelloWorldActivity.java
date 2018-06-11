@@ -32,6 +32,7 @@ import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWra
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_ALL_LOCATIONS;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_LOCATION;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_USER;
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_LOCATION_ADDED;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_CHECK_IN;
 
 public class HelloWorldActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, FirebaseListener {
@@ -73,6 +74,9 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
                 return true;
             case R.id.miSignOut:
                 auth.signOut();
+                return true;
+            case R.id.miSetup:
+                startActivity(new Intent(this, SetupActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -141,9 +145,11 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
 
     }
 
-    protected void onUserCheckedIn(Location location) {}
+    protected void onUserCheckedIn(User user) {}
 
     protected void onPostAdded(Post post) {}
+
+    protected void onLocationAdded(Location location) {}
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -170,13 +176,16 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
                     onUserRetrieved((User) databaseResult.getDatabaseObject());
                     break;
                 case DB_USER_CHECK_IN:
-                    onUserCheckedIn((Location) databaseResult.getDatabaseObject());
+                    onUserCheckedIn((User) databaseResult.getDatabaseObject());
                     break;
                 case DB_GET_ALL_LOCATIONS:
                     onAllLocationsRetrieved((ArrayList<Location>) databaseResult.getDatabaseObject());
                     break;
                 case DB_ADD_POST:
                     onPostAdded((Post) databaseResult.getDatabaseObject());
+                    break;
+                case DB_LOCATION_ADDED:
+                    onLocationAdded((Location) databaseResult.getDatabaseObject());
                     break;
             }
         }
