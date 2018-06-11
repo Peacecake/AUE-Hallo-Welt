@@ -97,12 +97,12 @@ public class MapsActivity extends HelloWorldActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent cameraScannerIntent = new Intent(MapsActivity.this, FakeCameraActivity.class);
-                startActivity(cameraScannerIntent);*/
+                Intent cameraScannerIntent = new Intent(MapsActivity.this, FakeCameraActivity.class);
+                startActivityForResult(cameraScannerIntent, CAMERA_REQ);
 
                 // This fixed the firebase redirect problem: Open camera directly, if camera gets closed onActivityResult is called
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQ);
+                /*Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQ);*/
 
             }
         });
@@ -122,7 +122,7 @@ public class MapsActivity extends HelloWorldActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         setLoading(false, fab);
-        if (requestCode == CAMERA_REQ && resultCode ==RESULT_OK) {
+        if (requestCode == CAMERA_REQ && resultCode == RESULT_OK) {
             if (activatedLocation != null) {
                 db.checkInUser(user, activatedLocation);
             } else {

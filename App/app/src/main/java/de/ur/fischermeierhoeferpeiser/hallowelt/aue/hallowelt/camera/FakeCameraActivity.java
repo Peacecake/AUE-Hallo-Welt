@@ -26,8 +26,12 @@ public class FakeCameraActivity extends HelloWorldActivity {
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent postsIntent = new Intent(FakeCameraActivity.this, PostsActivity.class);
-                startActivity(postsIntent);
+                /*Intent postsIntent = new Intent(FakeCameraActivity.this, PostsActivity.class);
+                startActivity(postsIntent);*/
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
     }
