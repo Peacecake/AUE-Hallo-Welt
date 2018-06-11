@@ -49,7 +49,8 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".scanner.CameraScannerActivity" />
         <activity android:name=".scanner.CameraPreviewActivity" />
-        <activity android:name=".camera.CameraActivity"></activity>
+        <activity android:name=".camera.CameraActivity" />
+        <activity android:name=".camera.FakeCameraActivity"></activity>
     </application>
 
 </manifest>

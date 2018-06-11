@@ -37,6 +37,7 @@ import java.util.Map;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.CameraActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.FakeCameraActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.posts.PostsActivity;
 
@@ -92,8 +93,8 @@ public class MapsActivity extends HelloWorldActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent postsIntent = new Intent(MapsActivity.this, PostsActivity.class);
-                startActivity(postsIntent);
+                Intent cameraScannerIntent = new Intent(MapsActivity.this, FakeCameraActivity.class);
+                startActivity(cameraScannerIntent);
                 /*
                 // This fixed the firebase redirect problem: Open camera directly, if camera gets closed onActivityResult is called
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
