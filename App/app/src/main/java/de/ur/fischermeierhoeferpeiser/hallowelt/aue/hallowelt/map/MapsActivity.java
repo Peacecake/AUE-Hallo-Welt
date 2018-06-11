@@ -38,6 +38,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.camera.CameraActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.posts.PostsActivity;
 
 /**
  * This demo shows how GMS Location can be used to check for changes to the users location.  The
@@ -91,9 +92,13 @@ public class MapsActivity extends HelloWorldActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent postsIntent = new Intent(MapsActivity.this, PostsActivity.class);
+                startActivity(postsIntent);
+                /*
                 // This fixed the firebase redirect problem: Open camera directly, if camera gets closed onActivityResult is called
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQ);
+                */
             }
         });
     }
@@ -141,13 +146,14 @@ public class MapsActivity extends HelloWorldActivity
     protected void onAllLocationsRetrieved(ArrayList<de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location> locations) {
         super.onAllLocationsRetrieved(locations);
         for(de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location location : locations) {
-            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            /*LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
             Marker m = mMap.addMarker(new MarkerOptions().position(position).title(location.getName()));
             Circle c = mMap.addCircle(new CircleOptions()
                     .center(position)
                     .radius(100)
                     .strokeColor(getColor(R.color.colorPrimary)));
             markerMap.put(m, location);
+            */
         }
         setLoading(false, fab);
     }
@@ -163,7 +169,7 @@ public class MapsActivity extends HelloWorldActivity
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMarkerClickListener(this);
 
-        /* LatLng westbad = new LatLng(49.024540, 12.054830);
+        LatLng westbad = new LatLng(49.024540, 12.054830);
         LatLng neupfarrplatz = new LatLng(49.018618, 12.096435);
         LatLng steinerneBruecke = new LatLng(49.021974, 12.097153);
 
@@ -185,8 +191,6 @@ public class MapsActivity extends HelloWorldActivity
                 .center(steinerneBruecke)
                 .radius(100)
                 .strokeColor(Color.RED));
-
-        */
 
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
