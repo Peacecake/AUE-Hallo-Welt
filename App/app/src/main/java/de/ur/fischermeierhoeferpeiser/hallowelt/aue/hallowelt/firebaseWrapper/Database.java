@@ -232,7 +232,13 @@ public class Database extends FirebaseWrapper {
         String header = post.get("header").toString();
         String content = post.get("content").toString();
         String author = post.get("authorUsername").toString();
-        Date date = post.containsKey("date") ? new Date(Long.parseLong(post.get("date").toString())) : new Date();
-        return new Post(id, header, content, author, date);
+        if (post.containsKey("date")) {
+            Map<String, Object> dateMap = (Map<String, Object>) post.get("date");
+            String timeInMillis = dateMap.get("time").toString();
+            Long millis = Long.parseLong(timeInMillis);
+            Date date = new Date(millis);
+            return new Post(id ,header, content,author, date);
+        }
+        return new Post(id, header, content, author, new Date());
     }
 }

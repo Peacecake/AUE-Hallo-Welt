@@ -51,7 +51,8 @@
         <activity android:name=".scanner.CameraPreviewActivity" />
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".camera.FakeCameraActivity" />
-        <activity android:name=".helpers.SetupActivity"></activity>
+        <activity android:name=".helpers.SetupActivity" />
+        <activity android:name=".posts.NewPostActivity"></activity>
     </application>
 
 </manifest>
