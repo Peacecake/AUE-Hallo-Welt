@@ -78,12 +78,12 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"/>
 
-        <TextView
+        <ListView
+            android:id="@+id/lvVisitedLocationsList"
             android:layout_below="@id/tvVisitedLocationsHeader"
-            android:text="@string/placeholder"
-            android:id="@+id/tvVisitedLocations"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </RelativeLayout>
 
     <de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader
