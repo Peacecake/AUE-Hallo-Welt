@@ -14,8 +14,18 @@
     <string name="finishRegister">Registrierung abschließen</string>
     <string name="visitedLocations">Besuchte Orte</string>
     <string name="overview">Interessante Orte</string>
+    <string name="setupExplanation">Diese Activity dient lediglich Setup-Zwecken. Sie befüllt die Datenbank mit hart kodierten Orten. Alle vorhanden Beiträge werden überschrieben!</string>
+    <string name="setup">Setup durchführen</string>
 
     <string name="placeholder">-</string>
+
+    <!-- Locations -->
+    <string name="westbad">Westbad</string>
+    <string name="westbadDescription">Ein tolles Bad im Westen Regensburgs</string>
+    <string name="neupfarrplatz">Neupfarrplatz</string>
+    <string name="neupfarrplatzDescription">Hier ist die Neupfarrkirche und man kann teueres Eis kaufen</string>
+    <string name="steinerneBrücke">Steinerne Brücke</string>
+    <string name="steinerneBrückeDescription">Die Steinerne Brücke ist neben dem Regensburger Dom das bedeutendste Wahrzeichen der Stadt Regensburg. Mit dem Baubeginn 1135 ist sie die älteste erhaltene Brücke Deutschlands und gilt als ein Meisterwerk mittelalterlicher Baukunst.</string>
 
 
     <string name="msgPasswordMatch">Passwörter stimmen nicht überein!</string>

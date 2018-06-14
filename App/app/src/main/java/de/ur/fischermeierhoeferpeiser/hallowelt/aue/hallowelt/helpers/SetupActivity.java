@@ -1,6 +1,5 @@
 package de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,9 +13,9 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Lo
 public class SetupActivity extends HelloWorldActivity implements View.OnClickListener {
 
     private final ArrayList<Location> locations = new ArrayList<Location> () {{
-        add(new Location(49.024540, 12.054830, "Westbad", "Ein tolles Bad im Westen Regensburgs"));
-        add(new Location(49.018618, 12.096435, "Neupfarrplatz", "Hier ist die Neupfarrkirche und man kann teueres Eis kaufen"));
-        add(new Location(49.021974, 12.097153, "Steinerne Brücke", "Die Steinerne Brücke ist neben dem Regensburger Dom das bedeutendste Wahrzeichen der Stadt Regensburg. Mit dem Baubeginn 1135 ist sie die älteste erhaltene Brücke Deutschlands und gilt als ein Meisterwerk mittelalterlicher Baukunst."));
+        add(new Location(49.024540, 12.054830, getString(R.string.westbad), getString(R.string.westbadDescription)));
+        add(new Location(49.018618, 12.096435, getString(R.string.neupfarrplatz), getString(R.string.neupfarrplatzDescription)));
+        add(new Location(49.021974, 12.097153, getString(R.string.steinerneBrücke), getString(R.string.steinerneBrückeDescription)));
     }};
 
     private int count;
