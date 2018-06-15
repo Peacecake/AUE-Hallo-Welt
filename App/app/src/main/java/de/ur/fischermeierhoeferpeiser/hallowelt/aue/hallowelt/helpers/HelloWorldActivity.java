@@ -151,7 +151,6 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
                 if (a.isNew()) {
                     AchievementDialog dialog = AchievementDialog.newInstance(a.getTitle(), a.getDescription());
                     dialog.show(getFragmentManager(), "tag");
-                    // Toast.makeText(this, newAchievement.getDescription(), Toast.LENGTH_SHORT).show();
                     user.setAchievementsOld();
                     db.updateAchievement(user, a);
                 }

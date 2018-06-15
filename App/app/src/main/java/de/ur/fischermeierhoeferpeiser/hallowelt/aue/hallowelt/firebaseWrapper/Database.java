@@ -104,6 +104,26 @@ public class Database extends FirebaseWrapper {
             });
     }
 
+    public void addPostCount(final User user) {
+        int postsCount = user.getPostsCount();
+        postsCount++;
+        final int finalPostsCount = postsCount;
+        usersRef.child(user.getId()).child("postsCount").setValue(postsCount).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    Achievement a = AchievementFactory.checkAuthorAchievement(finalPostsCount);
+                    if (a != null) {
+                        a.setNew(true);
+                        user.addAchievement(a);
+                        usersRef.child(user.getId()).child(ACHIEVEMENTS_REF).child(a.getId()).setValue(a);
+                        listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_ACHIEVEMENT_UNLOCKED, true, null, user));
+                    }
+                }
+            }
+        });
+    }
+
     public void addUser(User user) {
         usersRef.child(user.getId()).setValue(user);
     }
@@ -139,8 +159,6 @@ public class Database extends FirebaseWrapper {
         });
     }
 
-
-
     public void updateAchievement(final User user, Achievement achievement) {
         usersRef.child(user.getId()).child(ACHIEVEMENTS_REF).child(achievement.getId()).setValue(achievement).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -164,6 +182,7 @@ public class Database extends FirebaseWrapper {
                     String username = result.get("username").toString();
                     String id = result.get("id").toString();
                     String email = result.get("email").toString();
+                    int postCount = result.containsKey("postsCount") ? Integer.parseInt(result.get("postsCount").toString()) : 0;
 
                     ArrayList<Location> mappedLocations = new ArrayList<>();
                     ArrayList<Achievement> mappedAchievements = new ArrayList<>();
@@ -190,7 +209,7 @@ public class Database extends FirebaseWrapper {
                             Log.e("ERROR", e.getMessage());
                         }
                     }
-                    user = new User(id, username, email, mappedLocations, mappedAchievements);
+                    user = new User(id, username, email, postCount, mappedLocations, mappedAchievements);
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, true, null, user));
                 } else {
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, "Nutzerprofil nicht gefunden", null));

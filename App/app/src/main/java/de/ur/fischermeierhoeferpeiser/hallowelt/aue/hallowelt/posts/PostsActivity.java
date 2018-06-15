@@ -57,6 +57,7 @@ public class PostsActivity extends HelloWorldActivity implements View.OnClickLis
         if (db != null) {
             setLoading(true);
             db.getLocation(locationId);
+            db.getUser(auth.getUser().getUid());
         }
     }
 

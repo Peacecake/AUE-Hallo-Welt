@@ -11,6 +11,7 @@ import android.widget.Toast;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Location;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Post;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.User;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
 
@@ -18,6 +19,7 @@ public class NewPostActivity extends HelloWorldActivity implements View.OnClickL
 
     private String locationId;
     private Location location;
+    private User user;
     private EditText etHeader;
     private EditText etContent;
     private Button btnSave;
@@ -45,6 +47,7 @@ public class NewPostActivity extends HelloWorldActivity implements View.OnClickL
             initLoader(R.id.newPostLoader);
             setLoading(true, btnSave);
             db.getLocation(locationId);
+            db.getUser(auth.getUser().getUid());
         }
     }
 
@@ -65,7 +68,14 @@ public class NewPostActivity extends HelloWorldActivity implements View.OnClickL
     protected void onPostAdded(Post post) {
         super.onPostAdded(post);
         setLoading(false, btnSave);
+        db.addPostCount(user);
         finish();
+    }
+
+    @Override
+    protected void onUserRetrieved(User user) {
+        super.onUserRetrieved(user);
+        this.user = user;
     }
 
     @Override

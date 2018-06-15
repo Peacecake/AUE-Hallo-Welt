@@ -13,6 +13,7 @@ public class User {
     private ArrayList<Location> visitedLocations;
     private ArrayList<Achievement> achievements;
     private Location checkedInLocation;
+    private int postsCount;
 
     public User() {}
 
@@ -23,15 +24,21 @@ public class User {
         visitedLocations = new ArrayList<>();
         achievements = new ArrayList<>();
         checkedInLocation = null;
+        postsCount = 0;
     }
 
-    public User(String id, String username, String email, ArrayList<Location> locations, ArrayList<Achievement> achievements) {
+    public User(String id, String username, String email, int postsCount, ArrayList<Location> locations, ArrayList<Achievement> achievements) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.postsCount = postsCount;
         checkedInLocation = null;
         this.visitedLocations = locations != null ? locations : new ArrayList<Location>();
         this.achievements = achievements != null ? achievements : new ArrayList<Achievement>();
+    }
+
+    public int getPostsCount() {
+        return postsCount;
     }
 
     public String getId() {
