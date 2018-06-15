@@ -26,6 +26,16 @@
     <string name="neupfarrplatzDescription">Hier ist die Neupfarrkirche und man kann teueres Eis kaufen</string>
     <string name="steinerneBrücke">Steinerne Brücke</string>
     <string name="steinerneBrückeDescription">Die Steinerne Brücke ist neben dem Regensburger Dom das bedeutendste Wahrzeichen der Stadt Regensburg. Mit dem Baubeginn 1135 ist sie die älteste erhaltene Brücke Deutschlands und gilt als ein Meisterwerk mittelalterlicher Baukunst.</string>
+    <string name="stpeter">Dom St. Peter</string>
+    <string name="stpeterDescription">Der Regensburger Dom ist die bedeutendste Kirche der Stadt Regensburg und Kathedrale des Bistums Regensburg. Er gehört neben dem Kölner Dom zu den bedeutendsten gotischen Kathedralen in Deutschland.</string>
+    <string name="jahninsel">Jahninsel</string>
+    <string name="jahninselDescription">Die Jahninsel liegt zwischen Regensburg und Stadtamhof unter der Steinernen Brücke. Sie bietet im Sommer viel Platz für Grillparties und die Möglichkeit in der Donau baden zu gehen.</string>
+    <string name="dultplatz">Dultplatz</string>
+    <string name="dultplatzDescription">Zweimal im Jahr findet ihr das Regensburger Volksfest, die Dult, statt. Neben mehreren Bierzelten und vielen Fahrgeschäften, kann man die Warendult auch zum Shopping nutzen. Während des übrigens Jahres finden hier regelmäßig Flohmärkte statt.</string>
+    <string name="donaupark">Donaupark</string>
+    <string name="donauparkDescription">Weitläufiges Naherholungsgebiet im Westen der Stadt an der Donau mit Spielplätzen für kleine und größere Kinder. Es gibt auch einen Bolzplatz und eine Halfpipe für Skater. Ein schöner Platz zum Erholen, Spazierengehen, Radeln oder Joggen.</string>
+    <string name="sax">Sax</string>
+    <string name="saxDescription">Ein Klassiker unter den Bars in Regensburg mit überwiegend studentischem Publikum. Die Getränke sind vergleichsweise günstig, Brettspiele sind ebenfalls vorhanden.</string>
 
 
     <string name="msgPasswordMatch">Passwörter stimmen nicht überein!</string>
