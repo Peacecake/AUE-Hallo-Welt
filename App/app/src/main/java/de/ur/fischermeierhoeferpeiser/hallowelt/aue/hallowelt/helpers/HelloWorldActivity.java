@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.AchievementActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.ProfileActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Achievement;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
@@ -80,6 +81,9 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
                 return true;
             case R.id.miSetup:
                 startActivity(new Intent(this, SetupActivity.class));
+                return true;
+            case R.id.miAchievements:
+                startActivity(new Intent(this, AchievementActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

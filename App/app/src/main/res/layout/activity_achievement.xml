@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".auth.AchievementActivity">
+
+    <ListView
+        android:id="@+id/lvAchievementsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.Loader
+        android:id="@+id/achievementLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

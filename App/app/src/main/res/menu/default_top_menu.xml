@@ -5,6 +5,10 @@
         android:title="@string/profile"
         />
     <item
+        android:id="@+id/miAchievements"
+        android:title="@string/achievements"
+        />
+    <item
         android:id="@+id/miSetup"
         android:title="Setup"
         />

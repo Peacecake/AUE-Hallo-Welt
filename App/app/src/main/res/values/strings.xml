@@ -50,5 +50,6 @@
     <string name="permission_required_toast">Location permission is required for this demo.</string>
     <string name="close">Schließen</string>
     <string name="achievementUnlocked">Erfolg freigeschaltet</string>
+    <string name="achievements">Erfolge</string>
 
 </resources>

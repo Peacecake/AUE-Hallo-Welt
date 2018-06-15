@@ -52,7 +52,8 @@
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".camera.FakeCameraActivity" />
         <activity android:name=".helpers.SetupActivity" />
-        <activity android:name=".posts.NewPostActivity"></activity>
+        <activity android:name=".posts.NewPostActivity" />
+        <activity android:name=".auth.AchievementActivity"></activity>
     </application>
 
 </manifest>
