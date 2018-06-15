@@ -10,7 +10,8 @@
         android:layout_height="100sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/success" />
+        android:src="@drawable/success"
+        android:contentDescription="Achievement Icon" />
 
     <TextView
         android:id="@+id/tvAchievementTitle"
@@ -28,7 +29,8 @@
         android:text="@string/placeholder"
         android:layout_below="@id/tvAchievementTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"/>
 
     <TextView
         android:id="@+id/tvCloseAchievement"
@@ -36,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tvAchievementDescription"
-        android:text="Schließen"
+        android:text="@string/close"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         android:layout_alignParentRight="true" />
