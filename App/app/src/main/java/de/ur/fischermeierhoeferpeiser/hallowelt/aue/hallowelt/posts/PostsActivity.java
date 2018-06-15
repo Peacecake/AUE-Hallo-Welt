@@ -47,6 +47,7 @@ public class PostsActivity extends HelloWorldActivity implements View.OnClickLis
             Intent i = getIntent();
             locationId = i.getStringExtra("locationId");
             db.getLocation(locationId);
+            db.getUser(auth.getUser().getUid());
         }
     }
 

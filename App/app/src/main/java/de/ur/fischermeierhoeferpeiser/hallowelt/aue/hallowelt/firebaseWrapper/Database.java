@@ -20,7 +20,8 @@ public class Database extends FirebaseWrapper {
     private static final String LOCATIONS_REF = "Locations";
     private static final String USERS_REF = "Users";
     private static final String POSTS_REF = "Posts";
-    private static final String VISITED_REF = "VisitedLocations";
+    private static final String VISITED_REF = "visitedLocations";
+    private static final String ACHIEVEMENTS_REF = "achievements";
 
     private FirebaseDatabase db;
     private DatabaseReference locationsRef;
@@ -120,12 +121,36 @@ public class Database extends FirebaseWrapper {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        user.checkIn(location);
+                        if (user.checkIn(location)) {
+                            Achievement a = AchievementFactory.checkTravelAchievement(user.getVisitedLocations());
+                            if (a != null) {
+                                a.setNew(true);
+                                user.addAchievement(a);
+                                usersRef.child(user.getId()).child(ACHIEVEMENTS_REF).child(a.getId()).setValue(a);
+                                // usersRef.child(user.getId()).setValue(user);
+                                listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_ACHIEVEMENT_UNLOCKED, true, null, user));
+                            }
+                        }
                         listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, true, null, user));
                     } else {
                         listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_CHECK_IN, false, task.getException().getMessage(), user));
                     }
                 }
+        });
+    }
+
+
+
+    public void updateAchievement(final User user, Achievement achievement) {
+        usersRef.child(user.getId()).child(ACHIEVEMENTS_REF).child(achievement.getId()).setValue(achievement).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_UPDATE, true, null, user));
+                } else {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_USER_UPDATE, false, task.getException().getMessage(), null));
+                }
+            }
         });
     }
 
@@ -140,17 +165,32 @@ public class Database extends FirebaseWrapper {
                     String id = result.get("id").toString();
                     String email = result.get("email").toString();
 
+                    ArrayList<Location> mappedLocations = new ArrayList<>();
+                    ArrayList<Achievement> mappedAchievements = new ArrayList<>();
+
                     if (result.containsKey(VISITED_REF)) {
-                        ArrayList<Location> mappedLocations = new ArrayList<>();
-                        Map<String, Object> locations = (Map<String, Object>) result.get(VISITED_REF);
-                        for(Map.Entry<String, Object> entry : locations.entrySet()) {
-                            Map singleLocation = (Map) entry.getValue();
-                            mappedLocations.add(getLocationFromMap(singleLocation));
+                        try {
+                            Map<String, Object> allLocations = (Map<String,Object>) result.get(VISITED_REF);
+                            for(Map.Entry<String, Object> mLocation : allLocations.entrySet()) {
+                                Map singleLocation  = (Map) mLocation.getValue();
+                                mappedLocations.add(getLocationFromMap(singleLocation));
+                            }
+                        } catch (Exception e) {
+                            Log.e("ERROR", e.getMessage());
                         }
-                        user = new User(id, username, email, mappedLocations);
-                    } else {
-                        user = new User(id, username, email);
                     }
+                    if (result.containsKey(ACHIEVEMENTS_REF)) {
+                        try {
+                            Map<String, Object> allAchievements = (Map<String, Object>) result.get(ACHIEVEMENTS_REF);
+                            for(Map.Entry<String, Object> mAchievement : allAchievements.entrySet()) {
+                                Map singleAchievement = (Map) mAchievement.getValue();
+                                mappedAchievements.add(getAchievementFromMap(singleAchievement));
+                            }
+                        } catch (Exception e) {
+                            Log.e("ERROR", e.getMessage());
+                        }
+                    }
+                    user = new User(id, username, email, mappedLocations, mappedAchievements);
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, true, null, user));
                 } else {
                     listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, "Nutzerprofil nicht gefunden", null));
@@ -162,6 +202,18 @@ public class Database extends FirebaseWrapper {
                 listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_GET_USER, false, databaseError.getMessage(), null));
             }
         });
+    }
+
+    private Achievement getAchievementFromMap(Map<String, Object> map) {
+        Achievement achievement;
+
+        String id = map.get("id").toString();
+        String title = map.get("title").toString();
+        String description = map.get("description").toString();
+        boolean isNew = Boolean.parseBoolean(map.get("new").toString());
+        achievement = new Achievement(id, title, description, isNew);
+
+        return achievement;
     }
 
     public void getLocation(String id) {

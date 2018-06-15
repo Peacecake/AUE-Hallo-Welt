@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.MainActivity;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.R;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.auth.ProfileActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Achievement;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Authentification;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.AuthentificationResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Database;
@@ -28,12 +29,14 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Lo
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Post;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.User;
 
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_ACHIEVEMENT_UNLOCKED;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_ADD_POST;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_ALL_LOCATIONS;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_LOCATION;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_USER;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_LOCATION_ADDED;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_CHECK_IN;
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_UPDATE;
 
 public class HelloWorldActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, FirebaseListener {
     protected Database db;
@@ -142,7 +145,18 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
     protected void onAllLocationsRetrieved(ArrayList<Location> locations) {}
 
     protected void onUserRetrieved(User user) {
-
+        ArrayList<Achievement> achievements = user.getAchievements();
+        if (achievements != null) {
+            for(Achievement a : achievements) {
+                if (a.isNew()) {
+                    AchievementDialog dialog = AchievementDialog.newInstance(a.getTitle(), a.getDescription());
+                    dialog.show(getFragmentManager(), "tag");
+                    // Toast.makeText(this, newAchievement.getDescription(), Toast.LENGTH_SHORT).show();
+                    user.setAchievementsOld();
+                    db.updateAchievement(user, a);
+                }
+            }
+        }
     }
 
     protected void onUserCheckedIn(User user) {}
@@ -150,6 +164,14 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
     protected void onPostAdded(Post post) {}
 
     protected void onLocationAdded(Location location) {}
+
+    protected void onAchievementUnlocked(User user, Achievement newAchievement) {
+
+    }
+
+    protected void onUserUpdated(User user) {
+
+    }
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -186,6 +208,22 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
                     break;
                 case DB_LOCATION_ADDED:
                     onLocationAdded((Location) databaseResult.getDatabaseObject());
+                    break;
+                case DB_ACHIEVEMENT_UNLOCKED:
+                    User user = (User) databaseResult.getDatabaseObject();
+                    Achievement newAchievement = null;
+                    ArrayList<Achievement> achievements = user.getAchievements();
+                    if (achievements != null) {
+                        for (Achievement a : achievements) {
+                            if (a.isNew()) {
+                                newAchievement = a;
+                            }
+                        }
+                    }
+                    onAchievementUnlocked(user, newAchievement);
+                    break;
+                case DB_USER_UPDATE:
+                    onUserUpdated((User) databaseResult.getDatabaseObject());
                     break;
             }
         }

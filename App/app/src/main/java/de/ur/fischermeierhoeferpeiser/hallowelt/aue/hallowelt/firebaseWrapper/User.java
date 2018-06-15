@@ -11,6 +11,7 @@ public class User {
     private String username;
     private String email;
     private ArrayList<Location> visitedLocations;
+    private ArrayList<Achievement> achievements;
     private Location checkedInLocation;
 
     public User() {}
@@ -20,14 +21,17 @@ public class User {
         this.username = username;
         this.email = email;
         visitedLocations = new ArrayList<>();
+        achievements = new ArrayList<>();
         checkedInLocation = null;
     }
 
-    public User(String id, String username, String email, ArrayList<Location> locations) {
+    public User(String id, String username, String email, ArrayList<Location> locations, ArrayList<Achievement> achievements) {
         this.id = id;
         this.username = username;
         this.email = email;
-        this.visitedLocations = locations;
+        checkedInLocation = null;
+        this.visitedLocations = locations != null ? locations : new ArrayList<Location>();
+        this.achievements = achievements != null ? achievements : new ArrayList<Achievement>();
     }
 
     public String getId() {
@@ -46,16 +50,33 @@ public class User {
         return visitedLocations;
     }
 
+    public ArrayList<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    public void addAchievement(Achievement achievement) {
+        achievements.add(achievement);
+    }
+
+    public void setAchievementsOld() {
+        for(Achievement a : achievements) {
+            a.setNew(false);
+        }
+    }
+
     @Exclude
     public Location getCurrentLocation() {
         return checkedInLocation;
     }
 
-    public void checkIn(Location location) {
+    public boolean checkIn(Location location) {
+        boolean isNewLocation = false;
         if (isNewLocation(location)) {
             visitedLocations.add(location);
+            isNewLocation = true;
         }
         checkedInLocation = location;
+        return isNewLocation;
     }
 
     public void checkOut() {
