@@ -21,9 +21,9 @@
 
     <!-- Locations -->
     <string name="westbad">Westbad</string>
-    <string name="westbadDescription">Ein tolles Bad im Westen Regensburgs</string>
+    <string name="westbadDescription">Eines der größten Freizeitbäder Deutschlands. Insgesamt 3.331 m² Wasserfläche</string>
     <string name="neupfarrplatz">Neupfarrplatz</string>
-    <string name="neupfarrplatzDescription">Hier ist die Neupfarrkirche und man kann teueres Eis kaufen</string>
+    <string name="neupfarrplatzDescription">Der Neupfarrplatz liegt im Zentrum der Regensburger Altstadt. Ein beliebter Treffpunkt. Hier ist die Neupfarrkirche und man kann teueres Eis kaufen.</string>
     <string name="steinerneBrücke">Steinerne Brücke</string>
     <string name="steinerneBrückeDescription">Die Steinerne Brücke ist neben dem Regensburger Dom das bedeutendste Wahrzeichen der Stadt Regensburg. Mit dem Baubeginn 1135 ist sie die älteste erhaltene Brücke Deutschlands und gilt als ein Meisterwerk mittelalterlicher Baukunst.</string>
     <string name="stpeter">Dom St. Peter</string>
@@ -37,6 +37,20 @@
     <string name="sax">Sax</string>
     <string name="saxDescription">Ein Klassiker unter den Bars in Regensburg mit überwiegend studentischem Publikum. Die Getränke sind vergleichsweise günstig, Brettspiele sind ebenfalls vorhanden.</string>
 
+    <string name="spital">Spital</string>
+    <string name="spitalDescription">Das St. Katharinenspital und der Spitalgarten sind untrennbar mit dem Wahrzeichen der Stadt Regensburg, mit dem Dom und der Steinernen Brücke, verbunden. Seit seiner Entstehung im Mittelalter braut das Spital für seine Gäste, die Pfründner und das Spitalgesinde, wohlschmeckendes Bier. Die Brauereirechnungen des Spitals lassen sich bis in die Zeit um 1350 zurückverfolgen.</string>
+    <string name="rtbad">RT Bad</string>
+    <string name="rtbadDescription">Es gibt viel zu entdecken im Wöhrdbad: 50-Meter-Sportbecken, Sprungturm, großes Kinderbecken mit Wasserrutsche, Strömungskanal, Planschbecken mit Wasserpilz für die Kleinsten und ein gut ausgestatteter Abenteuerspielplatz bieten sommerliches Freizeitvergnügen für Groß und Klein.</string>
+    <string name="bismarckplatz">Bismarckplatz</string>
+    <string name="bismarckplatzDescription">Der Bismarckplatz ist in lauen Sommernächten der perfekte Treffpunkt für Jung- und Alt. Mit den zwei Brunnen fühlt man sich wie im Urlaub und als Erfrischung kann man sich beim Stenz ein Eis oder Bier holen. </string>
+    <string name="stenz">Stenz</string>
+    <string name="stenzDescription">“Mogst a Eis, Spatzl?” - der Stenz am Bismarckplatz ist wohl die bekannteste Eisdiele der Stadt mit super leckerem Eis. </string>
+    <string name="bar13">13</string>
+    <string name="bar13Description">Eine gemütliche Bar ist zum Beispiel die Bar 13 - Montags ist dort Karaoke angesagt!</string>
+    <string name="orangeBar">Orange Bar</string>
+    <string name="orangeBarDescription">Die fast direkt an der Donau gelegene Orange Bar mit gemütlichem Innenhof ist ein guter Ort, um Leute zu treffen und kennen zu lernen.</string>
+    <string name="kneitinger">Kneitinger</string>
+    <string name="kneitingerDescription">Bayerische Küche und Kultur kann man im Kneitinger am Arnulfsplatz genießen. </string>
 
     <string name="msgPasswordMatch">Passwörter stimmen nicht überein!</string>
     <string name="msgInvalidEmail">Ungültige E-Mail Adresse!</string>

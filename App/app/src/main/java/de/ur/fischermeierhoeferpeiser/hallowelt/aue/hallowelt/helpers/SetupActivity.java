@@ -35,6 +35,14 @@ public class SetupActivity extends HelloWorldActivity implements View.OnClickLis
             add(new Location(49.026383, 12.088610, getString(R.string.dultplatz), getString(R.string.dultplatzDescription)));
             add(new Location(49.023495, 12.048264, getString(R.string.donaupark), getString(R.string.donauparkDescription)));
             add(new Location(49.017866, 12.093099, getString(R.string.sax), getString(R.string.saxDescription)));
+
+            add(new Location(49.024217, 12.096606, getString(R.string.spital), getString(R.string.spitalDescription)));
+            add(new Location(49.025113, 12.085993, getString(R.string.rtbad), getString(R.string.rtbadDescription)));
+            add(new Location(49.018564, 12.089553, getString(R.string.bismarckplatz), getString(R.string.bismarckplatzDescription)));
+            add(new Location(49.018601, 12.090173, getString(R.string.stenz), getString(R.string.stenzDescription)));
+            add(new Location(49.021262, 12.092645, getString(R.string.bar13), getString(R.string.bar13Description)));
+            add(new Location(49.021129, 12.093623, getString(R.string.orangeBar), getString(R.string.orangeBarDescription)));
+            add(new Location(49.019696, 12.089012, getString(R.string.kneitinger), getString(R.string.kneitingerDescription)));
         }};
     }
 
