@@ -84,7 +84,7 @@ public class NewPostActivity extends HelloWorldActivity implements View.OnClickL
         validator.requiredFieldsAreEmpty(etHeader, etContent);
         if (validator.isValid()) {
             setLoading(true, btnSave);
-            Post p = new Post(etHeader.getText().toString(), etContent.getText().toString(), auth.getUser().getDisplayName());
+            Post p = new Post(etHeader.getText().toString(), etContent.getText().toString(), user.getUsername());
             etHeader.setText("");
             etContent.setText("");
             db.addPost(locationId, p);

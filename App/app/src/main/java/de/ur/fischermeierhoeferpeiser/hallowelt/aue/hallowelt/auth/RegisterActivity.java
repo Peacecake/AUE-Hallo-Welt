@@ -13,6 +13,7 @@ import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.Au
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.DatabaseResult;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.FormValidator;
 import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.helpers.HelloWorldActivity;
+import de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.map.MapsActivity;
 
 public class RegisterActivity extends HelloWorldActivity {
     private EditText etUsername;
@@ -79,7 +80,7 @@ public class RegisterActivity extends HelloWorldActivity {
         super.onAuthEvent(authentificationResult);
         setLoading(false, btnRegister);
         if (authentificationResult.wasSuccessful()) {
-            Intent i = new Intent(this, ProfileActivity.class);
+            Intent i = new Intent(this, MapsActivity.class);
             startActivity(i);
         } else {
             Toast.makeText(this, authentificationResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
