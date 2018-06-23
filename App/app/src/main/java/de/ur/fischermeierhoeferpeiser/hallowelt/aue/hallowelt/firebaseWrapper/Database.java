@@ -223,6 +223,19 @@ public class Database extends FirebaseWrapper {
         });
     }
 
+    public void deletePost(String locationId, String postId) {
+        locationsRef.child(locationId).child(POSTS_REF).child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_POST_DELETE, true, null, null));
+                } else {
+                    listener.onDatabaseEvent(new DatabaseResult(FirebaseResult.DB_POST_DELETE, false, task.getException().getMessage(), null));
+                }
+            }
+        });
+    }
+
     private Achievement getAchievementFromMap(Map<String, Object> map) {
         Achievement achievement;
 

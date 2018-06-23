@@ -36,6 +36,7 @@ import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWra
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_LOCATION;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_GET_USER;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_LOCATION_ADDED;
+import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_POST_DELETE;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_CHECK_IN;
 import static de.ur.fischermeierhoeferpeiser.hallowelt.aue.hallowelt.firebaseWrapper.FirebaseResult.DB_USER_UPDATE;
 
@@ -176,6 +177,8 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
 
     }
 
+    protected void onPostDeleted() {}
+
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         if (firebaseAuth.getCurrentUser() == null) {
@@ -227,6 +230,9 @@ public class HelloWorldActivity extends AppCompatActivity implements FirebaseAut
                     break;
                 case DB_USER_UPDATE:
                     onUserUpdated((User) databaseResult.getDatabaseObject());
+                    break;
+                case DB_POST_DELETE:
+                    onPostDeleted();
                     break;
             }
         }

@@ -12,6 +12,7 @@ public class FirebaseResult {
     public static final int DB_LOCATION_ADDED = 8;
     public static final int DB_ACHIEVEMENT_UNLOCKED = 9;
     public static final int DB_USER_UPDATE = 10;
+    public static final int DB_POST_DELETE = 11;
 
     private int type;
     private boolean isSuccessful;
